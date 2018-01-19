@@ -162,6 +162,8 @@ var drawGame = function(){
         element.avance();
         i+=1;
     });
+    context_game.font = "30pt Calibri,Geneva,Arial";
+    context_game.fillText("Score "+player.score, 590, 40);
 }
 // Fin rafraichissement du jeux
 
@@ -206,12 +208,15 @@ var start = null;
 var create=false;
 var cpteur=0; //le compteur utilisé pour gérer la fréquence et le type de zombie qui apparait
 
+var player = Object.create(joueur);
+player.init(10, 0, 1);
+
 var compteurInc = function (timestamp) {
     if (start === null) {
         start = timestamp;
     }
     if (timestamp - start >= 50) {
-
+        console.log(timestamp);
         if(allr&&alive){ // Si tout est chargé et que le joueur est en vie
             cpteur+=1
             if (cpteur%4==0){
