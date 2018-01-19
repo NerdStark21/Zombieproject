@@ -158,7 +158,7 @@ var drawGame = function(){
         }
 */
         // Draw du zombie
-        context_game.drawImage(element.imgZombie,32*element.etatMarche,0,32,32,element.posX,element.posY,40,40);
+        context_game.drawImage(element.imgZombie,32*(element.etatMarche%10),0,32,32,element.posX,element.posY,40,40);
         element.avance();
         i+=1;
     });

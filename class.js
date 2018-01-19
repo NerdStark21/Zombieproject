@@ -40,7 +40,7 @@ var Zombie ={
      */
 
     // Pour savoir quelle image de marche afficher
-    etatMarche: 0,
+    etatMarche: 21,
 
     /*
     Définit les stat du zombie en fonction de son niveau, lv1 = péon, lv4 = boss
@@ -90,10 +90,20 @@ var Zombie ={
 
     // Fais avancer le zombie
     avance: function(){
-        if (this.etatMarche<3)
-            this.etatMarche+=1;
-        else
-            this.etatMarche=0;
+        switch(this.etatMarche){
+            case 21:
+                this.etatMarche = 22;
+                break;
+            case 22:
+                this.etatMarche = 11;
+                break;
+            case 11:
+                this.etatMarche = 10;
+                break;
+            case 10:
+                this.etatMarche = 21;
+                break;
+        }
         this.posY+=this.speed;
         this.compteur++;
     },
