@@ -162,8 +162,8 @@ var drawGame = function(){
         element.avance();
         i+=1;
     });
-    context_game.font = "30pt Calibri,Geneva,Arial";
-    context_game.fillText("Score "+player.score, 590, 40);
+    context_game.font = "25pt Calibri,Geneva,Arial";
+    context_game.fillText("Score "+player.score, 640, 40);
 }
 // Fin rafraichissement du jeux
 
@@ -211,58 +211,81 @@ var cpteur=0; //le compteur utilisé pour gérer la fréquence et le type de zom
 var player = Object.create(joueur);
 player.init(10, 0, 1);
 
+function apparition(timestamp){
+//On tire les coordonnées initiale
+coordPopY=Math.floor((Math.random() * 60));
+coordPopX=Math.floor((Math.random() * 740));
+var img_g;
+var img_z;
+var lvl;
+if (timestamp<30000){ 
+    img_z=img_lvl1;
+    img_g=imgGrave_lv1;
+    lvl=1;
+}else if (timestamp<120000){
+    var z_lvl=Math.floor(Math.random()*2)
+                    
+    if (z_lvl<1){
+        img_z=img_lvl1;
+        img_g=imgGrave_lv1;
+        lvl=1;
+    }else{
+        img_z=img_lvl2;
+        img_g=imgGrave_lv2;
+        lvl=2;
+    }
+}else if(timestamp<200000){
+    if(timestamp ==140000){
+        img_z=img_lvl4;
+        img_g=imgGrave_lv4;
+        lvl=4;
+    }
+    else{
+        var z_lvl=Math.floor(Math.random()*3);
+
+        if (z_lvl<1){
+            img_z=img_lvl1;
+            img_g=imgGrave_lv1;
+            lvl=1;
+        }else if(z_lvl<2){
+            img_z=img_lvl2;
+            img_g=imgGrave_lv2;
+            lvl=2;
+        }else{
+            img_z=img_lvl3;
+            img_g=imgGrave_lv3;
+            lvl=3;
+        }
+    }
+}
+return [img_z, img_g, lvl];
+}
+
 var compteurInc = function (timestamp) {
     if (start === null) {
         start = timestamp;
     }
     if (timestamp - start >= 50) {
-        console.log(timestamp);
         if(allr&&alive){ // Si tout est chargé et que le joueur est en vie
             cpteur+=1
-            if (cpteur%4==0){
+            if (cpteur%50==0 && timestamp <140000){
 
-                //On tire les coordonnées initiale
-                coordPopY=Math.floor((Math.random() * 60));
-                coordPopX=Math.floor((Math.random() * 740));
-                var img_g;
-                var img_z;
-                var lvl;
+                zomb = apparition(timestamp);
+                img_z = zomb[0];
+                img_g = zomb[1];
+                lvl = zomb[2];
+                
+                var zomb = Object.create(Zombie);
+                zomb.init(img_z, img_g, lvl, coordPopX,coordPopY);
 
-                if (cpteur<60){ 
-                    img_z=img_lvl1;
-                    img_g=imgGrave_lv1;
-                    lvl=1;
-                }else if (cpteur<200){
-                    var z_lvl=Math.floor(Math.random()*2)
-                    
-                    if (z_lvl<1){
-                        img_z=img_lvl1;
-                        img_g=imgGrave_lv1;
-                        lvl=1;
-                    }else{
-                       img_z=img_lvl2;
-                       img_g=imgGrave_lv2;
-                       lvl=2;
-                   }
-                }else if(cpteur>=200){
-
-                    var z_lvl=Math.floor(Math.random()*3);
-
-                    if (z_lvl<1){
-                        img_z=img_lvl1;
-                        img_g=imgGrave_lv1;
-                        lvl=1;
-                    }else if(z_lvl<2){
-                        img_z=img_lvl2;
-                        img_g=imgGrave_lv2;
-                        lvl=2;
-                    }else{
-                        img_z=img_lvl3;
-                        img_g=imgGrave_lv3;
-                        lvl=3;
-                    }
-                }
-
+                zombies.push(zomb);
+            }
+            else if(cpteur%25==0){
+                zomb = apparition(timestamp);
+                img_z = zomb[0];
+                img_g = zomb[1];
+                lvl = zomb[2];
+                
                 var zomb = Object.create(Zombie);
                 zomb.init(img_z, img_g, lvl, coordPopX,coordPopY);
 
@@ -270,7 +293,7 @@ var compteurInc = function (timestamp) {
             }
             drawGame();
         }
-        start = timestamp;
+    start = timestamp;
     }
     requestAnimationFrame(compteurInc);
 };
