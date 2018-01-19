@@ -26,8 +26,7 @@ var joueur={
     }
 }
 
-
-var zombie ={
+var ZZZombie ={
     /*
      * Attributs : 
      * etatMarche
@@ -48,7 +47,7 @@ var zombie ={
     Définit les stat du zombie en fonction de son niveau, lv1 = péon, lv4 = boss
     Notation des vitesses : 1 <=> rapide    2 <=> modérée   3 <=> lente     4 <=>très lente
     */
-    init: function(imgZ,level, coordPopX, coordPopY){
+    init: function(imgZ, imgG,level, coordPopX, coordPopY){
         if(level <= 0 && level >= 5){
             console.log("Problème dans la définition de niveau, le zombie doit avoir un niveau compris entre 1 et 4 !")
         }
@@ -56,15 +55,18 @@ var zombie ={
             
             // On déclare les variables pour les images du zombie et de sa tombe
             this.imgZombie = imgZ;
-            //this.imgGrave = imgG;
-
+            this.imgGrave = imgG;
 
             // Coord de la position actuelle du zombie
             this.posX = coordPopX;
             this.posY = coordPopY;
+            this.popY = coordPopY;  // Pour la position de la tombe
 
             // Niveau du zombie
             this.level = level;
+
+            // Temps de vie
+            this.compteur = 0;
 
             // On va maintenant définir les stats et les images du zombie en fonction du niveau qu'on lui a mis
             if(this.level == 1){
@@ -94,11 +96,12 @@ var zombie ={
         else
             this.etatMarche=0;
         this.posY+=speed;
+        this.compteur++;
     },
 
-    draw: function(context){
+    draw: function(context2){
         console.log('draw');
-        context.drawImage(this.imgZombie,0,0,32,32,this.pos_X,this.pos_Y,40,40);
+        context2.drawImage(this.imgZombie,0,0,32,32,this.pos_X,this.pos_Y,40,40);
     }
 }
 
@@ -165,7 +168,17 @@ var drawGame = function(){
         //console.log(element.imgZombie);
 
         // Draw de la tombe
-        // la durée de vie d'unt tombe est de 10 unités
+        if(element.compteur<10){
+            context_game.drawImage(element.imgGrave,0,0,78,119,element.posX,element.popY,40,40);
+        }
+        element.compteur++; // On incremente le temps de vie du zombie
+
+        // Draw du zombie
+        context_game.drawImage(element.imgZombie,0,0,32,32,element.posX,element.posY,40,40);
+        element.avance();
+/*
+        // Draw de la tombe
+        // la durée de vie d'une tombe est de 10 unités
         if(element[5]<10){
             context_game.drawImage(element[3],0,0,78,119,element[1],element[4],40,40);
         }
@@ -176,13 +189,16 @@ var drawGame = function(){
 
         element[5]++;
         element[2]+=5;
+        */
     });
 }
+
+
+
 
 var lvl1r=false,lvl2r=false,lvl3r=false,lvl4r=false;
 var graver1=false,graver2=false,graver3=false,graver4=false;
 var allr=false;
-
 
 // fonctions chargées de tester si tout à été chargé correctement
 var testready_lvl1=function(){
@@ -222,7 +238,7 @@ var testready_gravelv1=function(){
     if (lvl1r&&lvl2r&&lvl3r&&lvl4r&&graver1&&graver2&&graver3&&graver4){
         allr=true;
     }
-    console.log("grave_load");
+    console.log("gravelv1_load");
 }
 
 var testready_gravelv2=function(){
@@ -230,7 +246,7 @@ var testready_gravelv2=function(){
     if (lvl1r&&lvl2r&&lvl3r&&lvl4r&&graver1&&graver2&&graver3&&graver4){
         allr=true;
     }
-    console.log("grave_load");
+    console.log("gravelv2_load");
 }
 
 
@@ -239,7 +255,7 @@ var testready_gravelv3=function(){
     if (lvl1r&&lvl2r&&lvl3r&&lvl4r&&graver1&&graver2&&graver3&&graver4){
         allr=true;
     }
-    console.log("grave_load");
+    console.log("gravelv3_load");
 }
 
 
@@ -248,11 +264,11 @@ var testready_gravelv4=function(){
     if (lvl1r&&lvl2r&&lvl3r&&lvl4r&&graver1&&graver2&&graver3&&graver4){
         allr=true;
     }
-    console.log("grave_load");
+    console.log("gravelv4_load");
 }
 
 
-
+// On charge les images des zombies
 var img_lvl1=new Image();
 img_lvl1.src="zombie_lvl1.png";
 img_lvl1.onload=testready_lvl1;
@@ -269,6 +285,7 @@ var img_lvl4=new Image();
 img_lvl4.src="zombie_lvl4.png";
 img_lvl4.onload=testready_lvl4;
 
+// On charge les imaes des tombes
 var imgGrave_lv1=new Image();
 imgGrave_lv1.src="tumb_lvl1.png";
 imgGrave_lv1.onload=testready_gravelv1;
@@ -300,14 +317,15 @@ var compteurInc = function (timestamp) {
     if (timestamp - start >= 1000) {
 
         if(allr){
-            //On tire les coordonnées initiale pour chaque zombie
+            //On tire aléatoirement les coordonnées initiale pour chaque zombie
             coordPopY=Math.floor((Math.random() * 100) + 36);
             coordPopX=Math.floor((Math.random() * 728) + 36);
-            y_init=coordPopY;
-            compteur=0;
 
-            var zombie=[img_lvl1,coordPopX,coordPopY, imgGrave_lv1, y_init, compteur];
+            var zombie = Object.create(ZZZombie);
+            zombie.init(img_lvl1, imgGrave_lv1, 1, coordPopX,coordPopY);
+
             zombies.push(zombie);
+            //console.log(zombies);
             drawGame();
         }
         start = timestamp;
