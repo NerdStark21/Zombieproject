@@ -1,4 +1,6 @@
 var speed = {"lv1": 4, "lv2": 3, "lv3": 2, "lv4": 1};
+var reward = {"lv1": 1, "lv2": 3, "lv3": 5, "lv4": 30};
+var pv = {"lv1": 1, "lv2": 2, "lv3": 3, "lv4": 25};
 
 
 var joueur={
@@ -41,7 +43,7 @@ var ZZZombie ={
      */
 
     // Pour savoir quelle image de marche afficher
-    etatMarche: 0,
+    etatMarche: 1,
 
     /*
     Définit les stat du zombie en fonction de son niveau, lv1 = péon, lv4 = boss
@@ -70,16 +72,16 @@ var ZZZombie ={
 
             // On va maintenant définir les stats et les images du zombie en fonction du niveau qu'on lui a mis
             if(this.level == 1){
-                this.pv = 1; this.reward = 1; this.speed = speed["lv1"];
+                this.pv = pv["lv1"]; this.reward = reward["lv1"]; this.speed = speed["lv1"];
             }
             else if(this.level == 2){
-                this.pv = 2; this.reward = 3; this.speed = speed["lv2"];
+                this.pv = pv["lv2"]; this.reward = reward["lv2"]; this.speed = speed["lv2"];
             }
             else if(this.level == 3){
-                this.pv = 3; this.reward = 5; this.speed = speed["lv3"];
+                this.pv = pv["lv3"]; this.reward = reward["lv13"]; this.speed = speed["lv3"];
             }
             else{
-                this.pv = 25; this.reward = 30; this.speed = speed["lv4"];
+                this.pv = pv["lv4"]; this.reward = reward["lv4"]; this.speed = speed["lv4"];
             }
         }
     },
@@ -91,18 +93,20 @@ var ZZZombie ={
 
     // Fais avancer le zombie
     avance: function(){
-        if (this.etatMarche<3)
-            this.etatMarche+=1;
-        else
-            this.etatMarche=0;
-        this.posY+=speed;
+        switch(this.etatMarche){
+            case 1:
+                this.etatMarche = 2;
+                break;
+            case 2:
+                this.etatMarche = 0;
+                break;
+            case 0:
+                this.etatMarche = 2;
+                break;
+        }
+        this.posY+=this.speed;
         this.compteur++;
     },
-
-    draw: function(context2){
-        console.log('draw');
-        context2.drawImage(this.imgZombie,0,0,32,32,this.pos_X,this.pos_Y,40,40);
-    }
 }
 
 //Génération du fond
@@ -165,35 +169,17 @@ var drawGame = function(){
     console.log('draw');
     context_game.clearRect(0,0,800,800);
     zombies.forEach(function(element){
-        //console.log(element.imgZombie);
-
         // Draw de la tombe
         if(element.compteur<10){
             context_game.drawImage(element.imgGrave,0,0,78,119,element.posX,element.popY,40,40);
         }
-        element.compteur++; // On incremente le temps de vie du zombie
 
         // Draw du zombie
-        context_game.drawImage(element.imgZombie,0,0,32,32,element.posX,element.posY,40,40);
+        console.log(element.etatMarche);
+        context_game.drawImage(element.imgZombie,32*element.etatMarche,0,32,32,element.posX,element.posY,40,40);
         element.avance();
-/*
-        // Draw de la tombe
-        // la durée de vie d'une tombe est de 10 unités
-        if(element[5]<10){
-            context_game.drawImage(element[3],0,0,78,119,element[1],element[4],40,40);
-        }
-
-        // Draw de l'image du zombie
-        context_game.drawImage(element[0],0,0,32,32,element[1],element[2],40,40);
-        console.log('compteur = '+element[5]);
-
-        element[5]++;
-        element[2]+=5;
-        */
     });
 }
-
-
 
 
 var lvl1r=false,lvl2r=false,lvl3r=false,lvl4r=false;
@@ -325,7 +311,7 @@ var compteurInc = function (timestamp) {
             zombie.init(img_lvl1, imgGrave_lv1, 1, coordPopX,coordPopY);
 
             zombies.push(zombie);
-            //console.log(zombies);
+
             drawGame();
         }
         start = timestamp;
