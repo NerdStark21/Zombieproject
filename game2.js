@@ -153,7 +153,7 @@ var drawGame = function(){
     zombies.forEach(function(element){
 
         // Draw de la tombe
-        if(element.compteur<40){
+        if(element.compteur<100){
             context_game.drawImage(element.imgGrave,0,0,78,119,element.posX,element.popY,40,40);
         }
         element.compteur++; // On incremente le temps de vie du zombie
@@ -212,6 +212,11 @@ function getClickPosition(e) {
         }
         i+=1;
     });
+<<<<<<< HEAD
+=======
+    //mousePos.x = 0;
+    //mousePos.y = 0;
+>>>>>>> 3a75373c5cc6dc75f5154e2eb6f2908cf274634b
 }
 
 function getMousePos(canvas, evt) {
