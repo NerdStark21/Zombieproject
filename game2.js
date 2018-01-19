@@ -43,7 +43,7 @@ var ZZZombie ={
      */
 
     // Pour savoir quelle image de marche afficher
-    etatMarche: 1,
+    etatMarche: 21,
 
     /*
     Définit les stat du zombie en fonction de son niveau, lv1 = péon, lv4 = boss
@@ -94,14 +94,17 @@ var ZZZombie ={
     // Fais avancer le zombie
     avance: function(){
         switch(this.etatMarche){
-            case 1:
-                this.etatMarche = 2;
+            case 21:
+                this.etatMarche = 22;
                 break;
-            case 2:
-                this.etatMarche = 0;
+            case 22:
+                this.etatMarche = 01;
                 break;
-            case 0:
-                this.etatMarche = 2;
+            case 01:
+                this.etatMarche = 10;
+                break;
+            case 10:
+                this.etatMarche = 21;
                 break;
         }
         this.posY+=this.speed;
@@ -148,8 +151,9 @@ canvas.addEventListener("click", getClickPosition, false);
 function getClickPosition(e) {
     var mousePos = getMousePos(canvas, e);
     zombies.forEach(function(element){
-        if (element[1]==mousePos.x&&element[2]==mousePos.y)
+        if(mousePos.x>element.posX && mousePos.x<element.posX+32 && mousePos.y>element.posY && mousePos.y<element.posY+32){
             console.log("le zombie est touché");
+        }
     });
 
 }
@@ -176,7 +180,7 @@ var drawGame = function(){
 
         // Draw du zombie
         console.log(element.etatMarche);
-        context_game.drawImage(element.imgZombie,32*element.etatMarche,0,32,32,element.posX,element.posY,40,40);
+        context_game.drawImage(element.imgZombie,32*(element.etatMarche%10),0,32,32,element.posX,element.posY,40,40);
         element.avance();
     });
 }
