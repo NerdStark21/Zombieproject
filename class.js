@@ -1,4 +1,4 @@
-var speed = {"lv1": 4, "lv2": 3, "lv3": 2, "lv4": 1};
+var speed = {"lv1": 1, "lv2": 3, "lv3": 2, "lv4": 1};
 
 var joueur={
     /*
@@ -80,6 +80,7 @@ var Zombie ={
             else{
                 this.pv = 25; this.reward = 30; this.speed = speed["lv4"];
             }
+            this.maxLife = this.pv;
         }
     },
 

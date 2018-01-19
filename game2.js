@@ -26,7 +26,7 @@ var context_game=canvas.getContext("2d");
 /* On charge l'ensemble des image nécéssaire au jeux*/
 var lvl1r=false,lvl2r=false,lvl3r=false,lvl4r=false;
 var graver1=false,graver2=false,graver3=false,graver4=false;
-var allr=false, bloddr=false;;
+var allr=false, bloodr=false;;
 
 // fonctions chargées de tester si tout à été chargé correctement
 var testready_lvl1=function(){
@@ -147,7 +147,6 @@ blood.onload=testready_blood;
 
 //Rafraichissement du jeux
 var drawGame = function(){
-    console.log('draw');
     context_game.clearRect(0,0,800,800);
 
     var i=0
@@ -191,7 +190,7 @@ var alive=true; //vrai si le joueur est encore en vie
 
 
 /* Gestion du click */
-canvas.addEventListener("click", getClickPosition, false);
+canvas.addEventListener("onclick", getClickPosition, false);
 
 function getClickPosition(e) {
     var mousePos = getMousePos(canvas, e);
@@ -200,7 +199,8 @@ function getClickPosition(e) {
         if (element.posX<=mousePos.x<=element.posX+40&&element.posY<=mousePos.y<=element.posY+40)
             console.log("zombie touché");
     });
-
+    mousePos.x = 0;
+    mousePos.y = 0;
 }
 
 function getMousePos(canvas, evt) {
@@ -277,7 +277,6 @@ return [img_z, img_g, lvl];
 var remainingTime = 200;
 
 var compteurInc = function (timestamp) {
-    console.log(timestamp);
     if (start === null) {
         start = timestamp;
     }
