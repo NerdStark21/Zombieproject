@@ -160,14 +160,17 @@ var drawGame = function(){
     context_game.clearRect(0,0,800,800);
     zombies.forEach(function(element){
         //console.log(element.imgZombie);
+
+        // Draw de la tombe
+        // la durée de vie d'unt tombe est de 10 unités
+        if(element[5]<10){
+            context_game.drawImage(element[3],0,0,78,119,element[1],element[4],40,40);
+        }
+
         // Draw de l'image du zombie
         context_game.drawImage(element[0],0,0,32,32,element[1],element[2],40,40);
-        // Draw de la tombe
         console.log('compteur = '+element[5]);
 
-        if(element[5]<10){
-            context_game.drawImage(element[3],0,0,32,32,element[1],element[4],40,40);
-        }
         element[5]++;
         element[2]+=5;
     });
@@ -176,14 +179,15 @@ var drawGame = function(){
     drawBlood();
 }
 
-var lvl1r=false,lvl2r=false,lvl3r=false,lvl4r=false, graver=false;
+var lvl1r=false,lvl2r=false,lvl3r=false,lvl4r=false;
+var graver1=false,graver2=false,graver3=false,graver4=false;
 var allr=false;
 
 
 // fonctions chargées de tester si tout à été chargé correctement
 var testready_lvl1=function(){
     lvl1r=true;
-    if (lvl1r&&lvl2r&&lvl3r&&lvl4r&&graver){
+    if (lvl1r&&lvl2r&&lvl3r&&lvl4r&&graver1&&graver2&&graver3&&graver4){
         allr=true;
     }
     console.log("lvl1_load");
@@ -191,7 +195,7 @@ var testready_lvl1=function(){
 
 var testready_lvl2=function(){
     lvl2r=true;
-    if (lvl1r&&lvl2r&&lvl3r&&lvl4r&&graver){
+    if (lvl1r&&lvl2r&&lvl3r&&lvl4r&&graver1&&graver2&&graver3&&graver4){
         allr=true;
     }
     console.log("lvl2_load");
@@ -199,7 +203,7 @@ var testready_lvl2=function(){
 
 var testready_lvl3=function(){
     lvl3r=true;
-    if (lvl1r&&lvl2r&&lvl3r&&lvl4r&&graver){
+    if (lvl1r&&lvl2r&&lvl3r&&lvl4r&&graver1&&graver2&&graver3&&graver4){
         allr=true;
     }
     console.log("lvl3_load");
@@ -207,19 +211,46 @@ var testready_lvl3=function(){
 
 var testready_lvl4=function(){
     lvl4r=true;
-    if (lvl1r&&lvl2r&&lvl3r&&lvl4r&&graver){
+    if (lvl1r&&lvl2r&&lvl3r&&lvl4r&&graver1&&graver2&&graver3&&graver4){
         allr=true;
     }
     console.log("lvl4_load");
 }
 
-var testready_grave=function(){
-    graver=true;
-    if (lvl1r&&lvl2r&&lvl3r&&lvl4r&&graver){
+var testready_gravelv1=function(){
+    graver1=true;
+    if (lvl1r&&lvl2r&&lvl3r&&lvl4r&&graver1&&graver2&&graver3&&graver4){
         allr=true;
     }
     console.log("grave_load");
 }
+
+var testready_gravelv2=function(){
+    graver2=true;
+    if (lvl1r&&lvl2r&&lvl3r&&lvl4r&&graver1&&graver2&&graver3&&graver4){
+        allr=true;
+    }
+    console.log("grave_load");
+}
+
+
+var testready_gravelv3=function(){
+    graver3=true;
+    if (lvl1r&&lvl2r&&lvl3r&&lvl4r&&graver1&&graver2&&graver3&&graver4){
+        allr=true;
+    }
+    console.log("grave_load");
+}
+
+
+var testready_gravelv4=function(){
+    graver4=true;
+    if (lvl1r&&lvl2r&&lvl3r&&lvl4r&&graver1&&graver2&&graver3&&graver4){
+        allr=true;
+    }
+    console.log("grave_load");
+}
+
 
 
 var img_lvl1=new Image();
@@ -238,8 +269,20 @@ var img_lvl4=new Image();
 img_lvl4.src="zombie_lvl4.png";
 img_lvl4.onload=testready_lvl4;
 
-var imgGrave=new Image();
+var imgGrave_lv1=new Image();
 imgGrave.src="tumb_lvl1.png";
+imgGrave.onload=testready_grave;
+
+var imgGrave_lv2=new Image();
+imgGrave.src="tumb_lvl2.png";
+imgGrave.onload=testready_grave;
+
+var imgGrave_lv3=new Image();
+imgGrave.src="tumb_lvl3.png";
+imgGrave.onload=testready_grave;
+
+var imgGrave_lv4=new Image();
+imgGrave.src="tumb_lvl4.png";
 imgGrave.onload=testready_grave;
 
 
