@@ -26,12 +26,12 @@ var context_game=canvas.getContext("2d");
 /* On charge l'ensemble des image nécéssaire au jeux*/
 var lvl1r=false,lvl2r=false,lvl3r=false,lvl4r=false;
 var graver1=false,graver2=false,graver3=false,graver4=false;
-var allr=false, bloodr=false;;
+var allr=false;
 
 // fonctions chargées de tester si tout à été chargé correctement
 var testready_lvl1=function(){
     lvl1r=true;
-    if (lvl1r&&lvl2r&&lvl3r&&lvl4r&&graver1&&graver2&&graver3&&graver4&&bloodr){
+    if (lvl1r&&lvl2r&&lvl3r&&lvl4r&&graver1&&graver2&&graver3&&graver4){
         allr=true;
     }
     console.log("lvl1_load");
@@ -39,7 +39,7 @@ var testready_lvl1=function(){
 
 var testready_lvl2=function(){
     lvl2r=true;
-    if (lvl1r&&lvl2r&&lvl3r&&lvl4r&&graver1&&graver2&&graver3&&graver4&&bloodr){
+    if (lvl1r&&lvl2r&&lvl3r&&lvl4r&&graver1&&graver2&&graver3&&graver4){
         allr=true;
     }
     console.log("lvl2_load");
@@ -47,7 +47,7 @@ var testready_lvl2=function(){
 
 var testready_lvl3=function(){
     lvl3r=true;
-    if (lvl1r&&lvl2r&&lvl3r&&lvl4r&&graver1&&graver2&&graver3&&graver4&&bloodr){
+    if (lvl1r&&lvl2r&&lvl3r&&lvl4r&&graver1&&graver2&&graver3&&graver4){
         allr=true;
     }
     console.log("lvl3_load");
@@ -55,7 +55,7 @@ var testready_lvl3=function(){
 
 var testready_lvl4=function(){
     lvl4r=true;
-    if (lvl1r&&lvl2r&&lvl3r&&lvl4r&&graver1&&graver2&&graver3&&graver4&&bloodr){
+    if (lvl1r&&lvl2r&&lvl3r&&lvl4r&&graver1&&graver2&&graver3&&graver4){
         allr=true;
     }
     console.log("lvl4_load");
@@ -63,7 +63,7 @@ var testready_lvl4=function(){
 
 var testready_gravelv1=function(){
     graver1=true;
-    if (lvl1r&&lvl2r&&lvl3r&&lvl4r&&graver1&&graver2&&graver3&&graver4&&bloodr){
+    if (lvl1r&&lvl2r&&lvl3r&&lvl4r&&graver1&&graver2&&graver3&&graver4){
         allr=true;
     }
     console.log("gravelv1_load");
@@ -71,7 +71,7 @@ var testready_gravelv1=function(){
 
 var testready_gravelv2=function(){
     graver2=true;
-    if (lvl1r&&lvl2r&&lvl3r&&lvl4r&&graver1&&graver2&&graver3&&graver4&&bloodr){
+    if (lvl1r&&lvl2r&&lvl3r&&lvl4r&&graver1&&graver2&&graver3&&graver4){
         allr=true;
     }
     console.log("gravelv2_load");
@@ -80,7 +80,7 @@ var testready_gravelv2=function(){
 
 var testready_gravelv3=function(){
     graver3=true;
-    if (lvl1r&&lvl2r&&lvl3r&&lvl4r&&graver1&&graver2&&graver3&&graver4&&bloodr){
+    if (lvl1r&&lvl2r&&lvl3r&&lvl4r&&graver1&&graver2&&graver3&&graver4){
         allr=true;
     }
     console.log("gravelv3_load");
@@ -89,18 +89,10 @@ var testready_gravelv3=function(){
 
 var testready_gravelv4=function(){
     graver4=true;
-    if (lvl1r&&lvl2r&&lvl3r&&lvl4r&&graver1&&graver2&&graver3&&graver4&&bloodr){
+    if (lvl1r&&lvl2r&&lvl3r&&lvl4r&&graver1&&graver2&&graver3&&graver4){
         allr=true;
     }
     console.log("gravelv4_load");
-}
-
-var testready_blood=function(){
-    bloodr=true;
-    if (lvl1r&&lvl2r&&lvl3r&&lvl4r&&graver1&&graver2&&graver3&&graver4&&bloodr){
-        allr=true;
-    }
-    console.log("bloodr_load");
 }
 
 
@@ -138,10 +130,6 @@ var imgGrave_lv4=new Image();
 imgGrave_lv4.src="tumb_lvl4.png";
 imgGrave_lv4.onload=testready_gravelv4;
 
-var blood=new Image();
-blood.src="blood.png";
-blood.onload=testready_blood;
-
 /* Fin du chargement */
 
 
@@ -154,7 +142,8 @@ var drawGame = function(){
     zombies.forEach(function(element){
 
         //La barre de vie
-        var long=Math.floor(40*(element.pv/element.maxLife));
+        var long=Math.floor(40*(element.pv/element.maxPV));
+        console.log(element.pv/element.maxPV);
         if (long<40&&long>20)
             context_game.fillStyle="green";
         else if (long<=20)
@@ -181,17 +170,22 @@ var drawGame = function(){
         }
 
         // Draw du zombie
-        context_game.drawImage(element.imgZombie,32*(element.etatMarche%10),0,32,32,element.posX,element.posY,40,40);
+        if (element.level<4){
+            context_game.drawImage(element.imgZombie,32*(element.etatMarche%10),0,32,32,element.posX,element.posY,40,40);
+        }else{
+            context_game.drawImage(element.imgZombie,74*(element.etatMarche%10),0,74,74,element.posX,element.posY,74,74);
+        }
+        
         element.avance();
         i+=1;
     });
+    context_game.fillStyle = "rgb(0,0,0)";
     context_game.font = "25pt Calibri,Geneva,Arial";
     context_game.fillText("Score "+player.score, 650, 40);
     context_game.fillText("End "+remainingTime, 10, 40);
     context_game.fillText("Life :"+player.pv,350,40)
 }
 // Fin rafraichissement du jeux
-
 
 // Création du joueur
 var player = Object.create(joueur);
@@ -206,13 +200,17 @@ var alive=true; //vrai si le joueur est encore en vie
 canvas.addEventListener("click", getClickPosition, false);
 
 function getClickPosition(e) {
-    console.log("click");
     var mousePos = getMousePos(canvas, e);
     var i=0;
     console.log(mousePos);
     zombies.forEach(function(element){
+        //console.log(element.posY-mousePos.Y);
+        /*Si on clique dans la zone formée par le zombie, on execute le code*/
+        //console.log(element.posX<=mousePos.x);
+        //console.log(mousePos.x<=element.posX+40);
+        //console.log(element.posY<=mousePos.y);
+        //console.log(mousePos.y<=element.posY+40);
         if ((element.posX-20<=mousePos.x+20)&&(mousePos.x+20<=element.posX+40)&&(element.posY<=mousePos.y+20)&&(mousePos.y+20<=element.posY+40)){
-            console.log("touché "+Att);
             if (!Att){
                 Att=true;
                 element.isAttack(1);
@@ -223,6 +221,7 @@ function getClickPosition(e) {
             }
         }
         i+=1;
+
     });
 
 }
@@ -245,115 +244,124 @@ var start = null;
 var create=false;
 var cpteur=0; //le compteur utilisé pour gérer la fréquence et le type de zombie qui apparait
 var Att=false;
-
-function apparition(timestamp){
-//On tire les coordonnées initiale
-coordPopY=Math.floor((Math.random() * 60));
-coordPopX=Math.floor((Math.random() * 740));
-var img_g;
-var img_z;
-var lvl;
-if (timestamp<30000){ 
-    img_z=img_lvl1;
-    img_g=imgGrave_lv1;
-    lvl=1;
-}else if (timestamp<120000){
-    var z_lvl=Math.floor(Math.random()*2)
-                    
-    if (z_lvl<1){
-        img_z=img_lvl1;
-        img_g=imgGrave_lv1;
-        lvl=1;
-    }else{
-        img_z=img_lvl2;
-        img_g=imgGrave_lv2;
-        lvl=2;
-    }
-}else if(timestamp<200000){
-    if(timestamp ==140000){
-        img_z=img_lvl4;
-        img_g=imgGrave_lv4;
-        lvl=4;
-    }
-    else{
-        var z_lvl=Math.floor(Math.random()*3);
-
-        if (z_lvl<1){
-            img_z=img_lvl1;
-            img_g=imgGrave_lv1;
-            lvl=1;
-        }else if(z_lvl<2){
-            img_z=img_lvl2;
-            img_g=imgGrave_lv2;
-            lvl=2;
-        }else{
-            img_z=img_lvl3;
-            img_g=imgGrave_lv3;
-            lvl=3;
-        }
-    }
-}
-return [img_z, img_g, lvl];
-}
-
+var fin=false;
+var boss=false;
 var remainingTime = 200;
 
 var compteurInc = function (timestamp) {
     if (start === null) {
         start = timestamp;
     }
-    if (timestamp - start >= 250){ // pas touche tu fait en fonction de ça
-        if (timestamp - start<800 &&alive) {
-            var Att=false;
-            console.log(Att);
-            if(allr){ // Si tout est chargé et que le joueur est en vie
-                if(cpteur%4==0){
-                    remainingTime-=1;
-                }
-                cpteur+=1
-                if (cpteur%4==0 && timestamp <140000){
+    if (timestamp - start >= 250) {
 
-                    zomb = apparition(timestamp);
-                    img_z = zomb[0];
-                    img_g = zomb[1];
-                    lvl = zomb[2];
-                    
-                    var zomb = Object.create(Zombie);
-                    zomb.init(img_z, img_g, lvl, coordPopX,coordPopY);
-
-                    zombies.push(zomb);
+        if(allr&&alive&&!fin){ // Si tout est chargé et que le joueur est en vie
+            if(cpteur%4==0){
+                remainingTime-=1;
+                if (remainingTime==0){
+                    fin=true;
                 }
-                else if(cpteur%25==0){
-                    zomb = apparition(timestamp);
-                    img_z = zomb[0];
-                    img_g = zomb[1];
-                    lvl = zomb[2];
-                
-                    var zomb = Object.create(Zombie);
-                    zomb.init(img_z, img_g, lvl, coordPopX,coordPopY);
-
-                    zombies.push(zomb);
-                }
-                drawGame();
             }
-        start = timestamp;
-        }
-        else{
+            cpteur+=1
+            if(cpteur<560){
+                if (cpteur%8==0){
+                    //On tire les coordonnées initiale
+                    coordPopY=Math.floor((Math.random() * 60));
+                    coordPopX=Math.floor((Math.random() * 740));
+                    var img_g;
+                    var img_z;
+                    var lvl;
+
+                    if (cpteur<120){ 
+                        img_z=img_lvl1;
+                        img_g=imgGrave_lv1;
+                        lvl=1;
+                    }else if (cpteur<400){
+                        var z_lvl=Math.floor(Math.random()+1)
+                        console.log(z_lvl);
+                        if (z_lvl==1){
+                            img_z=img_lvl1;
+                            img_g=imgGrave_lv1;
+                            lvl=1;
+                        }else{
+                        img_z=img_lvl2;
+                        img_g=imgGrave_lv2;
+                        lvl=2;
+                        }
+                    }else if(cpteur>=400){
+
+                        var z_lvl=Math.floor((Math.random()*2)+1);
+
+                        if (z_lvl==1){
+                            img_z=img_lvl1;
+                            img_g=imgGrave_lv1;
+                            lvl=1;
+                        }else if(z_lvl==2){
+                            img_z=img_lvl2;
+                            img_g=imgGrave_lv2;
+                            lvl=2;
+                        }else{
+                            img_z=img_lvl3;
+                            img_g=imgGrave_lv3;
+                            lvl=3;
+                        }
+                    }
+
+                    var zomb = Object.create(Zombie);
+                    zomb.init(img_z, img_g, lvl, coordPopX,coordPopY);
+
+                    zombies.push(zomb);
+                }
+            }else{
+                if (boss){
+                    if(cpteur%4==0){
+                        var z_lvl=Math.floor((Math.random()*2)+1);
+
+                        if (z_lvl==1){
+                            img_z=img_lvl1;
+                            img_g=imgGrave_lv1;
+                            lvl=1;
+                        }else if(z_lvl==2){
+                            img_z=img_lvl2;
+                            img_g=imgGrave_lv2;
+                            lvl=2;
+                        }else{
+                            img_z=img_lvl3;
+                            img_g=imgGrave_lv3;
+                            lvl=3;
+                        }
+                    }
+                }else{
+                    boss=true;
+                    img_z=img_lvl4;
+                    img_g=imgGrave_lv4;
+                    lvl=4;
+                }
+                var zomb = Object.create(Zombie);
+                zomb.init(img_z, img_g, lvl, coordPopX,coordPopY);
+
+                zombies.push(zomb);
+            }
+
+            Att=false;
+            drawGame();
+        }else{
             if(alive){
-                context_game.drawImage(fond, 512*i,512*j)
-                context_game.font = "100pt Calibri,Geneva,Arial";
-                context_game.fillText("GAME OVER", 200, 100);
-                context_game.fillText("YOU WIN", 200, 200);
-                context_game.fillText("SCORE : "+player.score, 400, 300);
+                //context_game.drawImage(fond, 512*i,512*j)
+                context_game.font = "80pt Calibri,Geneva,Arial";
+                context_game.fillText("GAME OVER", 200, 200);
+                context_game.fillText("YOU WIN", 200, 300);
+                context_game.fillText("SCORE : "+player.score, 400, 400);
             }
             else{
-                context_game.font = "100pt Calibri,Geneva,Arial";
-                context_game.fillText("GAME OVER", 200, 100);
-                context_game.fillText("YOU LOSE", 200, 200);
-                context_game.fillText("SCORE : "+player.score, 320, 300);
+                context_game.font = "80pt Calibri,Geneva,Arial";
+                context_game.fillText("GAME OVER", 200, 200);
+                context_game.fillText("YOU LOSE", 200, 300);
+                context_game.fillText("SCORE : "+player.score, 320, 400);
             }
+            
         }
-    }
-    requestAnimationFrame(compteurInc);
+        start = timestamp;
+}
+requestAnimationFrame(compteurInc);
 };
 requestAnimationFrame(compteurInc);

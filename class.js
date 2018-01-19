@@ -1,4 +1,4 @@
-var speed = {"lv1": 1, "lv2": 3, "lv3": 2, "lv4": 1};
+var speed = {"lv1": 4, "lv2": 3, "lv3": 2, "lv4": 1};
 
 var joueur={
     /*
@@ -69,18 +69,17 @@ var Zombie ={
 
             // On va maintenant définir les stats et les images du zombie en fonction du niveau qu'on lui a mis
             if(this.level == 1){
-                this.pv = 1; this.reward = 1; this.speed = speed["lv1"];
+               this.maxPV=1; this.pv = 1; this.reward = 1; this.speed = speed["lv1"];
             }
             else if(this.level == 2){
-                this.pv = 2; this.reward = 3; this.speed = speed["lv2"];
+               this.maxPV=2; this.pv = 2; this.reward = 3; this.speed = speed["lv2"];
             }
             else if(this.level == 3){
-                this.pv = 3; this.reward = 5; this.speed = speed["lv3"];
+               this.maxPV=3; this.pv = 3; this.reward = 5; this.speed = speed["lv3"];
             }
             else{
-                this.pv = 25; this.reward = 30; this.speed = speed["lv4"];
+               this.maxPV=25; this.pv = 25; this.reward = 30; this.speed = speed["lv4"];
             }
-            this.maxLife = this.pv;
         }
     },
 
