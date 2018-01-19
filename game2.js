@@ -121,24 +121,6 @@ fond.src="grass.png";
 fond.onload= drawFond;
 
 
-//Génération du sang
-var blood=document.getElementById("blood");
-var context_blood=blood.getContext("2d");
-
-var drawBlood = function(){
-    context_blood.clearRect(0,0,800,800);
-    var opa=1-(player.pv/10);
-    $('#blood').css("opacity",opa);
-    context_blood.drawImage(blood_png, 0,0);
-}
-
-var blood_png=new Image();
-blood_png.src="blood.png";
-blood_png.onload=drawBlood;
-
-
-
-
 //Génération du jeux
 var player = Object.create(joueur);
 player.init(10, 0 , 0.5);
@@ -153,6 +135,28 @@ var hauteurSpritGrave = 32;
 var pos_X =200;
 var pos_Y = 0 ;
 var canvas=document.getElementById("cv");
+
+/* Gestion du click */
+canvas.addEventListener("click", getClickPosition, false);
+
+function getClickPosition(e) {
+    var mousePos = getMousePos(canvas, e);
+    zombies.forEach(function(element){
+        if (element[1]==mousePos.x&&element[2]==mousePos.y)
+            console.log("le zombie est touché");
+    });
+
+}
+
+function getMousePos(canvas, evt) {
+    var rect = canvas.getBoundingClientRect();
+    return {
+      x: evt.clientX - rect.left,
+      y: evt.clientY - rect.top
+  };
+}
+/* Fin gestion du click*/
+
 var context_game=canvas.getContext("2d");
 
 var drawGame = function(){
@@ -174,9 +178,6 @@ var drawGame = function(){
         element[5]++;
         element[2]+=5;
     });
-
-    //context_game.drawImage(img_lvl1,0,0,32,32,coordPopX,coordPopY,40,40);
-    drawBlood();
 }
 
 var lvl1r=false,lvl2r=false,lvl3r=false,lvl4r=false;
@@ -308,66 +309,8 @@ var compteurInc = function (timestamp) {
 
             var zombie=[img_lvl1,coordPopX,coordPopY, imgGrave, y_init, compteur];
             zombies.push(zombie);
-            //console.log(zombies);
-
-/*
-            z=Object.create(zombie);
-            z.init(img_lvl1,1,coordPopX,coordPopY);
-            zombies.push(z);*/
             drawGame();
         }
-/*      
-        if(!create){
-
-            //On tire les coordonnées initiale pour chaque zombie
-            coordPopY=Math.floor((Math.random() * 100) + 36);
-            coordPopX=Math.floor((Math.random() * 728) + 36);
-
-            z=Object.create(zombie);
-            z.init(1,coordPopX,coordPopY);
-            z.onload=drawGame();
-            create=true;
-        }else{
-            if (z.posY<764){
-            z.posY+=z.speed; //on fait avancer chaque zombie
-            }
-            //sinon on le supprime
-            else{
-                player.estTouche(1); 
-                //var index=zombies.indexOf(element);
-                //zombies.splice(index,1);
-            }
-        }
-        z.imgZombie.onload=drawGame();
-
-/*
-        if (zombies.length){//si on a des zombies dans notre tableau
-            console.log(zombies);
-;            zombies.forEach(function(element){
-                console.log(element.posY);
-                // S'il n'a pas atteind le bas
-                if (element.posY<764){
-                    console.log('avance'); 
-                    element.avance(); //on fait avancer chaque zombie
-                    console.log(element.posY); 
-                }
-                //sinon on le supprime
-                else{
-                    player.estTouche(1); 
-                    var index=zombies.indexOf(element);
-                    zombies.splice(index,1);
-                }
-            })
-        }else{
-
-        // On crée notre nouveau zombie
-        z.init(1,coordPopX,coordPopY);
-        // On l'ajoute a la liste des zombies present
-        zombies.push(z);
-        console.log('pop');}
-        
-        zombies.onload=drawGame();
-        */
         start = timestamp;
     }
     requestAnimationFrame(compteurInc);
