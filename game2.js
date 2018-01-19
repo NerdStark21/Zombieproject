@@ -26,12 +26,12 @@ var context_game=canvas.getContext("2d");
 /* On charge l'ensemble des image nécéssaire au jeux*/
 var lvl1r=false,lvl2r=false,lvl3r=false,lvl4r=false;
 var graver1=false,graver2=false,graver3=false,graver4=false;
-var allr=false;
+var allr=false, bloddr=false;;
 
 // fonctions chargées de tester si tout à été chargé correctement
 var testready_lvl1=function(){
     lvl1r=true;
-    if (lvl1r&&lvl2r&&lvl3r&&lvl4r&&graver1&&graver2&&graver3&&graver4){
+    if (lvl1r&&lvl2r&&lvl3r&&lvl4r&&graver1&&graver2&&graver3&&graver4&&bloodr){
         allr=true;
     }
     console.log("lvl1_load");
@@ -39,7 +39,7 @@ var testready_lvl1=function(){
 
 var testready_lvl2=function(){
     lvl2r=true;
-    if (lvl1r&&lvl2r&&lvl3r&&lvl4r&&graver1&&graver2&&graver3&&graver4){
+    if (lvl1r&&lvl2r&&lvl3r&&lvl4r&&graver1&&graver2&&graver3&&graver4&&bloodr){
         allr=true;
     }
     console.log("lvl2_load");
@@ -47,7 +47,7 @@ var testready_lvl2=function(){
 
 var testready_lvl3=function(){
     lvl3r=true;
-    if (lvl1r&&lvl2r&&lvl3r&&lvl4r&&graver1&&graver2&&graver3&&graver4){
+    if (lvl1r&&lvl2r&&lvl3r&&lvl4r&&graver1&&graver2&&graver3&&graver4&&bloodr){
         allr=true;
     }
     console.log("lvl3_load");
@@ -55,7 +55,7 @@ var testready_lvl3=function(){
 
 var testready_lvl4=function(){
     lvl4r=true;
-    if (lvl1r&&lvl2r&&lvl3r&&lvl4r&&graver1&&graver2&&graver3&&graver4){
+    if (lvl1r&&lvl2r&&lvl3r&&lvl4r&&graver1&&graver2&&graver3&&graver4&&bloodr){
         allr=true;
     }
     console.log("lvl4_load");
@@ -63,7 +63,7 @@ var testready_lvl4=function(){
 
 var testready_gravelv1=function(){
     graver1=true;
-    if (lvl1r&&lvl2r&&lvl3r&&lvl4r&&graver1&&graver2&&graver3&&graver4){
+    if (lvl1r&&lvl2r&&lvl3r&&lvl4r&&graver1&&graver2&&graver3&&graver4&&bloodr){
         allr=true;
     }
     console.log("gravelv1_load");
@@ -71,7 +71,7 @@ var testready_gravelv1=function(){
 
 var testready_gravelv2=function(){
     graver2=true;
-    if (lvl1r&&lvl2r&&lvl3r&&lvl4r&&graver1&&graver2&&graver3&&graver4){
+    if (lvl1r&&lvl2r&&lvl3r&&lvl4r&&graver1&&graver2&&graver3&&graver4&&bloodr){
         allr=true;
     }
     console.log("gravelv2_load");
@@ -80,7 +80,7 @@ var testready_gravelv2=function(){
 
 var testready_gravelv3=function(){
     graver3=true;
-    if (lvl1r&&lvl2r&&lvl3r&&lvl4r&&graver1&&graver2&&graver3&&graver4){
+    if (lvl1r&&lvl2r&&lvl3r&&lvl4r&&graver1&&graver2&&graver3&&graver4&&bloodr){
         allr=true;
     }
     console.log("gravelv3_load");
@@ -89,10 +89,18 @@ var testready_gravelv3=function(){
 
 var testready_gravelv4=function(){
     graver4=true;
-    if (lvl1r&&lvl2r&&lvl3r&&lvl4r&&graver1&&graver2&&graver3&&graver4){
+    if (lvl1r&&lvl2r&&lvl3r&&lvl4r&&graver1&&graver2&&graver3&&graver4&&bloodr){
         allr=true;
     }
     console.log("gravelv4_load");
+}
+
+var testready_blood=function(){
+    bloodr=true;
+    if (lvl1r&&lvl2r&&lvl3r&&lvl4r&&graver1&&graver2&&graver3&&graver4&&bloodr){
+        allr=true;
+    }
+    console.log("bloodr_load");
 }
 
 
@@ -129,6 +137,10 @@ imgGrave_lv3.onload=testready_gravelv3;
 var imgGrave_lv4=new Image();
 imgGrave_lv4.src="tumb_lvl4.png";
 imgGrave_lv4.onload=testready_gravelv4;
+
+var blood=new Image();
+blood.src="blood.png";
+blood.onload=testready_blood;
 
 /* Fin du chargement */
 
@@ -304,6 +316,7 @@ var compteurInc = function (timestamp) {
     }
     else{
         if(alive){
+            context_game.drawImage(fond, 512*i,512*j)
             context_game.font = "100pt Calibri,Geneva,Arial";
             context_game.fillText("GAME OVER", 400, 100);
             context_game.fillText("YOU WIN", 400, 200);
