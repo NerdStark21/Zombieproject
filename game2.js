@@ -164,6 +164,7 @@ var drawGame = function(){
     });
     context_game.font = "25pt Calibri,Geneva,Arial";
     context_game.fillText("Score "+player.score, 640, 40);
+    context_game.fillText("End "+remainingTime, 650, 60);
 }
 // Fin rafraichissement du jeux
 
@@ -261,12 +262,18 @@ if (timestamp<30000){
 return [img_z, img_g, lvl];
 }
 
+var remainingTime = 200;
+
 var compteurInc = function (timestamp) {
+    console.log(timestamp);
     if (start === null) {
         start = timestamp;
     }
-    if (timestamp - start >= 50) {
+    if (timestamp - start >= 0 && timestamp - start<200000) {
         if(allr&&alive){ // Si tout est chargé et que le joueur est en vie
+            if(cpteur%50==0){
+                remainingTime-=1;
+            }
             cpteur+=1
             if (cpteur%50==0 && timestamp <140000){
 
@@ -294,6 +301,20 @@ var compteurInc = function (timestamp) {
             drawGame();
         }
     start = timestamp;
+    }
+    else{
+        if(alive){
+            context_game.font = "100pt Calibri,Geneva,Arial";
+            context_game.fillText("GAME OVER", 400, 100);
+            context_game.fillText("YOU WIN", 400, 200);
+            context_game.fillText("SCORE : "+player.score, 400, 300);
+        }
+        else{
+            context_game.font = "100pt Calibri,Geneva,Arial";
+            context_game.fillText("GAME OVER", 400, 100);
+            context_game.fillText("YOU LOSE", 400, 200);
+            context_game.fillText("SCORE : "+player.score, 640, 300);
+        }
     }
     requestAnimationFrame(compteurInc);
 };
