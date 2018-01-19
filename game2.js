@@ -210,7 +210,7 @@ var compteurInc = function (timestamp) {
     if (start === null) {
         start = timestamp;
     }
-    if (timestamp - start >= 500) {
+    if (timestamp - start >= 50) {
 
         if(allr&&alive){ // Si tout est chargé et que le joueur est en vie
             cpteur+=1
@@ -228,9 +228,9 @@ var compteurInc = function (timestamp) {
                     img_g=imgGrave_lv1;
                     lvl=1;
                 }else if (cpteur<200){
-                    var z_lvl=Math.floor(Math.random()+1)
+                    var z_lvl=Math.floor(Math.random()*2)
                     
-                    if (z_lvl==1){
+                    if (z_lvl<1){
                         img_z=img_lvl1;
                         img_g=imgGrave_lv1;
                         lvl=1;
@@ -241,13 +241,13 @@ var compteurInc = function (timestamp) {
                    }
                 }else if(cpteur>=200){
 
-                    var z_lvl=Math.floor(Math.random()+2);
+                    var z_lvl=Math.floor(Math.random()*3);
 
-                    if (z_lvl==1){
+                    if (z_lvl<1){
                         img_z=img_lvl1;
                         img_g=imgGrave_lv1;
                         lvl=1;
-                    }else if(z_lvl==2){
+                    }else if(z_lvl<2){
                         img_z=img_lvl2;
                         img_g=imgGrave_lv2;
                         lvl=2;
