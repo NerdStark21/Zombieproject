@@ -136,9 +136,6 @@ var blood_png=new Image();
 blood_png.src="blood.png";
 blood_png.onload=drawBlood;
 
-
-
-
 //Génération du jeux
 var player = Object.create(joueur);
 player.init(10, 0 , 0.5);
@@ -270,20 +267,20 @@ img_lvl4.src="zombie_lvl4.png";
 img_lvl4.onload=testready_lvl4;
 
 var imgGrave_lv1=new Image();
-imgGrave.src="tumb_lvl1.png";
-imgGrave.onload=testready_grave;
+imgGrave_lv1.src="tumb_lvl1.png";
+imgGrave_lv1.onload=testready_gravelv1;
 
 var imgGrave_lv2=new Image();
-imgGrave.src="tumb_lvl2.png";
-imgGrave.onload=testready_grave;
+imgGrave_lv2.src="tumb_lvl2.png";
+imgGrave_lv2.onload=testready_gravelv2;
 
 var imgGrave_lv3=new Image();
-imgGrave.src="tumb_lvl3.png";
-imgGrave.onload=testready_grave;
+imgGrave_lv3.src="tumb_lvl3.png";
+imgGrave_lv3.onload=testready_gravelv3;
 
 var imgGrave_lv4=new Image();
-imgGrave.src="tumb_lvl4.png";
-imgGrave.onload=testready_grave;
+imgGrave_lv4.src="tumb_lvl4.png";
+imgGrave_lv4.onload=testready_gravelv4;
 
 
 var zombies=[];
@@ -306,7 +303,7 @@ var compteurInc = function (timestamp) {
             y_init=coordPopY;
             compteur=0;
 
-            var zombie=[img_lvl1,coordPopX,coordPopY, imgGrave, y_init, compteur];
+            var zombie=[img_lvl1,coordPopX,coordPopY, imgGrave_lv1, y_init, compteur];
             zombies.push(zombie);
             //console.log(zombies);
 
