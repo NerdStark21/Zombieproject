@@ -157,7 +157,7 @@ var drawGame = function(){
             context_game.drawImage(element.imgGrave,0,0,78,119,element.posX,element.popY,40,40);
         }
         element.compteur++; // On incremente le temps de vie du zombie
-/*
+
         //controle de la position du zombie pour les dégâts au joueur
         if (element.posY>=760){
             console.log("Ouch !!!");
@@ -167,15 +167,16 @@ var drawGame = function(){
                 alive=false;
             }
         }
-*/
+
         // Draw du zombie
         context_game.drawImage(element.imgZombie,32*(element.etatMarche%10),0,32,32,element.posX,element.posY,40,40);
         element.avance();
         i+=1;
     });
     context_game.font = "25pt Calibri,Geneva,Arial";
-    context_game.fillText("Score "+player.score, 640, 40);
-    context_game.fillText("End "+remainingTime, 650, 60);
+    context_game.fillText("Score "+player.score, 650, 40);
+    context_game.fillText("End "+remainingTime, 10, 40);
+    context_game.fillText("Life :"+player.pv,350,40)
 }
 // Fin rafraichissement du jeux
 
@@ -190,17 +191,27 @@ var alive=true; //vrai si le joueur est encore en vie
 
 
 /* Gestion du click */
-canvas.addEventListener("onclick", getClickPosition, false);
+canvas.addEventListener("click", getClickPosition, false);
 
 function getClickPosition(e) {
+    console.log("click");
     var mousePos = getMousePos(canvas, e);
+    var i=0;
+    console.log(mousePos);
     zombies.forEach(function(element){
-        /* Si on clique dans la zone formée par le zombie, on execute le code*/
-        if (element.posX<=mousePos.x<=element.posX+40&&element.posY<=mousePos.y<=element.posY+40)
-            console.log("zombie touché");
+        if ((element.posX-20<=mousePos.x+20)&&(mousePos.x+20<=element.posX+40)&&(element.posY<=mousePos.y+20)&&(mousePos.y+20<=element.posY+40)){
+            console.log("touché");
+            if (!Att){
+                Att=true;
+                element.isAttack(1);
+                if (element.pv==0){
+                    zombies.splice(i,1);
+                    player.score+=element.reward;
+                }
+            }
+        }
+        i+=1;
     });
-    mousePos.x = 0;
-    mousePos.y = 0;
 }
 
 function getMousePos(canvas, evt) {
@@ -220,9 +231,7 @@ window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequest
 var start = null;
 var create=false;
 var cpteur=0; //le compteur utilisé pour gérer la fréquence et le type de zombie qui apparait
-
-var player = Object.create(joueur);
-player.init(10, 0, 1);
+var Att=false;
 
 function apparition(timestamp){
 //On tire les coordonnées initiale
@@ -280,52 +289,55 @@ var compteurInc = function (timestamp) {
     if (start === null) {
         start = timestamp;
     }
-    if (timestamp - start >= 0 && timestamp - start<200000) {
-        if(allr&&alive){ // Si tout est chargé et que le joueur est en vie
-            if(cpteur%50==0){
-                remainingTime-=1;
-            }
-            cpteur+=1
-            if (cpteur%50==0 && timestamp <140000){
+    if (timestamp - start >= 250){ // pas touche tu fait en fonction de ça
+        if (timestamp - start<200000 &&alive) {
+            if(allr){ // Si tout est chargé et que le joueur est en vie
+                if(cpteur%4==0){
+                    remainingTime-=1;
+                }
+                cpteur+=1
+                if (cpteur%4==0 && timestamp <140000){
 
-                zomb = apparition(timestamp);
-                img_z = zomb[0];
-                img_g = zomb[1];
-                lvl = zomb[2];
+                    zomb = apparition(timestamp);
+                    img_z = zomb[0];
+                    img_g = zomb[1];
+                    lvl = zomb[2];
+                    
+                    var zomb = Object.create(Zombie);
+                    zomb.init(img_z, img_g, lvl, coordPopX,coordPopY);
+
+                    zombies.push(zomb);
+                }
+                else if(cpteur%25==0){
+                    zomb = apparition(timestamp);
+                    img_z = zomb[0];
+                    img_g = zomb[1];
+                    lvl = zomb[2];
                 
-                var zomb = Object.create(Zombie);
-                zomb.init(img_z, img_g, lvl, coordPopX,coordPopY);
+                    var zomb = Object.create(Zombie);
+                    zomb.init(img_z, img_g, lvl, coordPopX,coordPopY);
 
-                zombies.push(zomb);
+                    zombies.push(zomb);
+                }
+                var Att=false;
+                drawGame();
             }
-            else if(cpteur%25==0){
-                zomb = apparition(timestamp);
-                img_z = zomb[0];
-                img_g = zomb[1];
-                lvl = zomb[2];
-                
-                var zomb = Object.create(Zombie);
-                zomb.init(img_z, img_g, lvl, coordPopX,coordPopY);
-
-                zombies.push(zomb);
-            }
-            drawGame();
-        }
-    start = timestamp;
-    }
-    else{
-        if(alive){
-            context_game.drawImage(fond, 512*i,512*j)
-            context_game.font = "100pt Calibri,Geneva,Arial";
-            context_game.fillText("GAME OVER", 400, 100);
-            context_game.fillText("YOU WIN", 400, 200);
-            context_game.fillText("SCORE : "+player.score, 400, 300);
+        start = timestamp;
         }
         else{
-            context_game.font = "100pt Calibri,Geneva,Arial";
-            context_game.fillText("GAME OVER", 400, 100);
-            context_game.fillText("YOU LOSE", 400, 200);
-            context_game.fillText("SCORE : "+player.score, 640, 300);
+            if(alive){
+                context_game.drawImage(fond, 512*i,512*j)
+                context_game.font = "100pt Calibri,Geneva,Arial";
+                context_game.fillText("GAME OVER", 200, 100);
+                context_game.fillText("YOU WIN", 200, 200);
+                context_game.fillText("SCORE : "+player.score, 400, 300);
+            }
+            else{
+                context_game.font = "100pt Calibri,Geneva,Arial";
+                context_game.fillText("GAME OVER", 200, 100);
+                context_game.fillText("YOU LOSE", 200, 200);
+                context_game.fillText("SCORE : "+player.score, 320, 300);
+            }
         }
     }
     requestAnimationFrame(compteurInc);
