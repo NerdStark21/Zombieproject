@@ -212,11 +212,7 @@ function getClickPosition(e) {
         }
         i+=1;
     });
-<<<<<<< HEAD
-=======
-    //mousePos.x = 0;
-    //mousePos.y = 0;
->>>>>>> 3a75373c5cc6dc75f5154e2eb6f2908cf274634b
+
 }
 
 function getMousePos(canvas, evt) {
