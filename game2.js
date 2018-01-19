@@ -148,9 +148,21 @@ blood.onload=testready_blood;
 //Rafraichissement du jeux
 var drawGame = function(){
     context_game.clearRect(0,0,800,800);
+    context_game.beginPath();
 
     var i=0
     zombies.forEach(function(element){
+
+        //La barre de vie
+        var long=Math.floor(40*(element.pv/element.maxLife));
+        if (long<40&&long>20)
+            context_game.fillStyle="green";
+        else if (long<=20)
+            context_game.fillStyle="red";
+        else
+            context_game.fillStyle="green";
+        context_game.fill();
+        context_game.rect(element.posX,element.posY-10,long,4);
 
         // Draw de la tombe
         if(element.compteur<100){
@@ -200,7 +212,7 @@ function getClickPosition(e) {
     console.log(mousePos);
     zombies.forEach(function(element){
         if ((element.posX-20<=mousePos.x+20)&&(mousePos.x+20<=element.posX+40)&&(element.posY<=mousePos.y+20)&&(mousePos.y+20<=element.posY+40)){
-            console.log("touché");
+            console.log("touché "+Att);
             if (!Att){
                 Att=true;
                 element.isAttack(1);
@@ -291,7 +303,9 @@ var compteurInc = function (timestamp) {
         start = timestamp;
     }
     if (timestamp - start >= 250){ // pas touche tu fait en fonction de ça
-        if (timestamp - start<200000 &&alive) {
+        if (timestamp - start<800 &&alive) {
+            var Att=false;
+            console.log(Att);
             if(allr){ // Si tout est chargé et que le joueur est en vie
                 if(cpteur%4==0){
                     remainingTime-=1;
@@ -320,7 +334,6 @@ var compteurInc = function (timestamp) {
 
                     zombies.push(zomb);
                 }
-                var Att=false;
                 drawGame();
             }
         start = timestamp;
